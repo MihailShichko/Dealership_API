@@ -9,7 +9,6 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.utils.representation import serializer_repr
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
@@ -44,7 +43,6 @@ class CarViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_serializer_class(self):
-        # Use read serializer for GET requests, write serializer for POST/PUT
         if self.action in ['list', 'retrieve']:
             return CarReadSerializer
         return CarWriteSerializer
@@ -56,9 +54,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
+#
+# class LogoutSerializer:
+#     pass
 
-class LogoutSerializer:
-    pass
 
 
 class LogoutView(APIView):
@@ -83,6 +82,6 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return Response({"success": "Token blacklisted successfully."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"Error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)

@@ -7,7 +7,7 @@ from channels.generic.websocket import WebsocketConsumer
 class CarPostConsumer(WebsocketConsumer):
     def connect(self):
         async_to_sync(self.channel_layer.group_add)(
-            'car_notifications',  # Group name
+            'car_notifications',
             self.channel_name
         )
         self.accept()
