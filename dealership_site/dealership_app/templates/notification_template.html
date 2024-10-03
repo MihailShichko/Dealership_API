@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Notifications</title>
+</head>
+<body>
+    <h1>Car Notifications</h1>
+    <ul id="car-list"></ul>
+
+    <script>
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws/notifications/');
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const carData = data.car_data;
+            console.log(data);
+        };
+
+        socket.onclose = function(event){
+            console.error("webSocket closed unexpectedly");
+        }
+
+    </script>
+</body>
+</html>
